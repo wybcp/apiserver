@@ -2,6 +2,7 @@ package main
 
 import (
 	"apiserver/config"
+	"apiserver/model"
 	"apiserver/router"
 	"errors"
 
@@ -26,6 +27,10 @@ func main() {
 	if err := config.Init(*cfg); err != nil {
 		panic(err)
 	}
+	// init DB
+	model.DB.Init()
+	defer model.DB.Close()
+
 	// 根据配置文件设置gin的运行模式
 	gin.SetMode(viper.GetString("runmode"))
 
