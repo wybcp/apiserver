@@ -1,0 +1,18 @@
+runmode: debug # 开发模式, debug, release, test
+addr: :8099 # HTTP绑定端口
+name: apiserver # API Server的名字
+url: http://127.0.0.1:8099 # pingServer函数请求的API服务器的ip:port
+max_ping_count: 10 # pingServer函数try的次数
+log:
+  #输出位置，有两个可选项 —— file 和 stdout
+  writer: file.stdout
+  # 日志级别，DEBUG、INFO、WARN、ERROR、FATAL
+  logger_level: DEBUG
+  # 日志的输出格式，JSON 或者 plaintext，true 会输出成非 JSON 格式，false 会输出成 JSON 格式
+  log_format_text: true
+  logger_file: log/apiserver.log
+  # rotate 依据，可选的有 daily 和 size。如果选 daily 则根据天进行转存，如果是 size 则根据大小进行转存
+  rollingPolicy: daily
+  log_rotate_date: 1
+  log_rotate_size: 1024
+  log_backup_count: 7
