@@ -4,6 +4,7 @@ import (
 	"apiserver/config"
 	"apiserver/model"
 	"apiserver/router"
+	"apiserver/router/middleware"
 	"errors"
 
 	// "log"
@@ -35,10 +36,11 @@ func main() {
 	gin.SetMode(viper.GetString("runmode"))
 
 	g := gin.New()
-	middlewares := []gin.HandlerFunc{}
+	// middlewares := []gin.HandlerFunc{}
 	router.Load(
 		g,
-		middlewares...,
+		middleware.RequestID(),
+		middleware.Logging(),
 	)
 	go func() {
 		if err := pingServer(); err != nil {
