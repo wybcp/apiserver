@@ -37,6 +37,11 @@ func Index(id uint64) (*User, error) {
 	d := DB.Self.Where("id=?", id).First(&u)
 	return u, d.Error
 }
+func GetUser(name string) (*User, error) {
+	u := &User{}
+	d := DB.Self.Where("name=?", name).First(&u)
+	return u, d.Error
+}
 func List(name string, offset, limit int) ([]*User, uint64, error) {
 	if limit == 0 {
 		limit = constvar.DefaultLimit

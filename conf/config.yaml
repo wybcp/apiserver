@@ -3,7 +3,8 @@ addr: :8099 # HTTP绑定端口
 name: apiserver # API Server的名字
 url: http://127.0.0.1:8099 # pingServer函数请求的API服务器的ip:port
 max_ping_count: 10 # pingServer函数try的次数
-gormlog: true，
+gormlog: true
+jwt_secret: welcome
 log:
   #输出位置，有两个可选项 —— file 和 stdout
   writer: file,stdout
@@ -27,3 +28,8 @@ db:
 #   addr: 127.0.0.1:3306
 #   username: root
 #   password:
+tls:
+  addr: :8088
+  cert: conf/server.crt
+  key: conf/server.key
+

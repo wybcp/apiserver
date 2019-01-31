@@ -9,11 +9,23 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Get gets an user by the user identifier.
+// Index Get gets an user by the user identifier.
 func Index(c *gin.Context) {
 	// Get the user by the `username` from the database.
-	userId, _ := strconv.Atoi(c.Param("id"))
-	user, err := model.Index(uint64(userId))
+	userID, _ := strconv.Atoi(c.Param("id"))
+	user, err := model.Index(uint64(userID))
+	if err != nil {
+		SendResponse(c, errno.ErrUserNotFound, nil)
+		return
+	}
+
+	SendResponse(c, nil, user)
+}
+
+// GetUser Get gets an user by the user identifier.
+func GetUser(c *gin.Context) {
+	// Get the user by the `username` from the database.
+	user, err := model.GetUser(c.Param("username"))
 	if err != nil {
 		SendResponse(c, errno.ErrUserNotFound, nil)
 		return

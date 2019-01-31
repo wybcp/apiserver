@@ -1,2 +1,5 @@
 *.log
 apiserver
+tips.md
+cpu.profile
+*.test
