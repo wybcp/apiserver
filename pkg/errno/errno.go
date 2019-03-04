@@ -59,7 +59,7 @@ func DecodeErr(err error) (int, string) {
 	case *Errno:
 		return typed.Code, typed.Message
 	default:
+		return InternalServerError.Code, err.Error()
 	}
 
-	return InternalServerError.Code, err.Error()
 }

@@ -71,7 +71,9 @@ func ParseRequest(c *gin.Context) (*Context, error) {
 
 	var t string
 	// Parse the header to get the token part.
-	fmt.Sscanf(header, "Bearer %s", &t)
+	if _, err := fmt.Sscanf(header, "Bearer %s", &t); err != nil {
+		return nil, err
+	}
 	return Parse(t, secret)
 }
 
@@ -85,7 +87,7 @@ func Sign(ctx *gin.Context, c Context, secret string) (tokenString string, err e
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"id":       c.ID,
 		"username": c.Username,
-		"nbf":      time.Now().Unix(),
+		"nbf":      time.Now().Add(time.Duration(15 * time.Minute * 60 * 24)).Unix(),
 		"iat":      time.Now().Unix(),
 	})
 	// Sign the token with the specified secret.

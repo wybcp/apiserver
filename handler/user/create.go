@@ -20,7 +20,7 @@ func Create(c *gin.Context) {
 	if err = c.Bind(&r); err != nil {
 		SendResponse(c, errno.ErrBind, nil)
 		// c.JSON(http.StatusOK, gin.H{"error": errno.ErrBind})
-		return
+		//return
 	}
 	u := model.User{
 		Username: r.Username,

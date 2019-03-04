@@ -30,16 +30,17 @@ var (
 )
 
 func main() {
+	//命令行读取
 	pflag.Parse()
 	if *version {
 		v := v.Get()
-		marshalled, err := json.MarshalIndent(&v, "", "  ")
+		marshaled, err := json.MarshalIndent(&v, "", "  ")
 		if err != nil {
 			fmt.Printf("%v\n", err)
 			os.Exit(1)
 		}
 
-		fmt.Println(string(marshalled))
+		fmt.Println(string(marshaled))
 		return
 	}
 	// init config
@@ -51,14 +52,14 @@ func main() {
 	defer model.DB.Close()
 
 	// 根据配置文件设置gin的运行模式
-	gin.SetMode(viper.GetString("runmode"))
+	gin.SetMode(viper.GetString("run_mode"))
 
 	g := gin.New()
-	// middlewares := []gin.HandlerFunc{}
+
 	router.Load(
 		g,
 		middleware.RequestID(),
-		// middleware.Logging(),
+		middleware.Logging(),
 	)
 	go func() {
 		if err := pingServer(); err != nil {
@@ -68,14 +69,15 @@ func main() {
 	}()
 
 	// tls
-	// cert := viper.GetString("tls.cert")
-	// key := viper.GetString("tls.key")
-	// if cert != "" && key != "" {
-	// 	go func() {
-	// 		log.Infof("Start to listening the incoming requests on https address: %s", viper.GetString("tls.addr"))
-	// 		log.Info(http.ListenAndServeTLS(viper.GetString("tls.addr"), cert, key, g).Error())
-	// 	}()
-	// }
+	cert := viper.GetString("tls.cert")
+	key := viper.GetString("tls.key")
+	if cert != "" && key != "" {
+		go func() {
+			log.Infof("Start to listening the incoming requests on https address: %s", viper.GetString("tls.addr"))
+			log.Info(http.ListenAndServeTLS(viper.GetString("tls.addr"), cert, key, g).Error())
+		}()
+	}
+	// http
 	log.Infof("Start to listening the incoming requests on http address: %s", viper.GetString("addr"))
 	log.Info(http.ListenAndServe(viper.GetString("addr"), g).Error())
 }
@@ -90,5 +92,5 @@ func pingServer() error {
 		log.Info("Waiting for the router, retry in 1 second.")
 		time.Sleep(time.Second)
 	}
-	return errors.New("Cannot connect to the router")
+	return errors.New("Cannot connect to the router.")
 }

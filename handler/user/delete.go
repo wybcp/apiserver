@@ -12,11 +12,10 @@ import (
 
 // Delete delete an user by the user identifier.
 func Delete(c *gin.Context) {
-	userId, _ := strconv.Atoi(c.Param("id"))
+	userID, _ := strconv.Atoi(c.Param("id"))
 	var u model.User
-	if err := u.Delete(uint64(userId)); err != nil {
+	if err := u.Delete(uint64(userID)); err != nil {
 		SendResponse(c, errno.ErrDatabase, nil)
-		return
 	}
 
 	SendResponse(c, nil, nil)

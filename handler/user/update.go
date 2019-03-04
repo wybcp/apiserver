@@ -17,7 +17,7 @@ import (
 func Update(c *gin.Context) {
 	log.Info("Update function called.", lager.Data{"X-Request-Id": util.GetReqID(c)})
 	// Get the user id from the url parameter.
-	userId, _ := strconv.Atoi(c.Param("id"))
+	userID, _ := strconv.Atoi(c.Param("id"))
 
 	// Binding the user data.
 	var u model.User
@@ -27,7 +27,7 @@ func Update(c *gin.Context) {
 	}
 
 	// We update the record based on the user id.
-	u.ID = uint64(userId)
+	u.ID = uint64(userID)
 
 	// Validate the data.
 	if err := u.Validate(); err != nil {

@@ -64,7 +64,9 @@ func (c *Config) initLog() {
 		LogRotateSize:  viper.GetInt("log.log_rotate_size"),
 		LogBackupCount: viper.GetInt("log.log_backup_count"),
 	}
-	log.InitWithConfig(&passLagerCfg)
+	if err := log.InitWithConfig(&passLagerCfg); err != nil {
+		log.Fatalf(err, "init log failed")
+	}
 }
 
 func (c *Config) watchConfig() {

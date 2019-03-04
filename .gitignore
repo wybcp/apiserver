@@ -3,3 +3,7 @@ apiserver
 tips.md
 cpu.profile
 *.test
+log
+config.yaml
+conf/config.yaml
+admin.sh

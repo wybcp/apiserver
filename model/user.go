@@ -3,9 +3,7 @@ package model
 import (
 	"apiserver/pkg/auth"
 	"apiserver/pkg/constvar"
-	"fmt"
-
-	validator "gopkg.in/go-playground/validator.v9"
+	"gopkg.in/go-playground/validator.v9"
 )
 
 type User struct {
@@ -42,24 +40,21 @@ func GetUser(name string) (*User, error) {
 	d := DB.Self.Where("name=?", name).First(&u)
 	return u, d.Error
 }
-func List(name string, offset, limit int) ([]*User, uint64, error) {
-	if limit == 0 {
+func List(offset, limit int) ([]*User, uint64, error) {
+	// 一次提取不超过100条数据
+	if limit == 0 || limit > constvar.MaxLimit {
 		limit = constvar.DefaultLimit
 	}
 
 	users := make([]*User, 0)
 	var count uint64
 
-	where := fmt.Sprintf("name like '%%%s%%'", name)
-	if err := DB.Self.Model(&User{}).Where(where).Count(&count).Error; err != nil {
+	//if err := DB.Self.Where(where).Offset(offset).Limit(limit).Order("id desc").Find(&users).Error; err != nil {
+	if err := DB.Self.Offset(offset).Limit(limit).Order("id desc").Find(&users).Error; err != nil {
 		return users, count, err
 	}
 
-	if err := DB.Self.Where(where).Offset(offset).Limit(limit).Order("id desc").Find(&users).Error; err != nil {
-		return users, count, err
-	}
-
-	return users, count, nil
+	return users, uint64(len(users)), nil
 }
 
 // Compare with the plain text password. Returns true if it's the same as the encrypted one (in the `User` struct).

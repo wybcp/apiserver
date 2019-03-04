@@ -8,9 +8,9 @@ import (
 	"apiserver/util"
 )
 
-func ListUser(username string, offset, limit int) ([]*model.UserInfo, uint64, error) {
+func ListUser(offset, limit int) ([]*model.UserInfo, uint64, error) {
 	infos := make([]*model.UserInfo, 0)
-	users, count, err := model.List(username, offset, limit)
+	users, count, err := model.List(offset, limit)
 	if err != nil {
 		return nil, count, err
 	}

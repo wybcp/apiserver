@@ -14,10 +14,10 @@ all: gotool
 	@go build -v -ldflags ${ldflags} .
 clean:
 	rm -f apiserver
-	find . -name "[._]*.s[a-w][a-z]" | xargs -i rm -f {}
+	find . -name "[._]*.s[a-w][a-z]" | xargs  rm -f {}
 gotool:
 	gofmt -w .
-	go tool vet . | grep -v vendor;true
+	go vet . | grep -v vendor;true
 ca:
 	openssl req -new -nodes -x509 -out conf/server.crt -keyout conf/server.key -days 3650 -subj "/C=DE/ST=NRW/L=Earth/O=Random Company/OU=IT/CN=127.0.0.1/emailAddress=xxxxx@qq.com"
 

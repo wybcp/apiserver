@@ -30,7 +30,7 @@ func Logging() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		start := time.Now().UTC()
 		path := c.Request.URL.Path
-
+		///v1/user|/login 这类路由记录，否则 跳过
 		reg := regexp.MustCompile("(/v1/user|/login)")
 		if !reg.MatchString(path) {
 			return
@@ -46,11 +46,11 @@ func Logging() gin.HandlerFunc {
 		if c.Request.Body != nil {
 			bodyBytes, _ = ioutil.ReadAll(c.Request.Body)
 		}
-
+		//该中间件需要截获 HTTP 的请求信息，因为 HTTP 的请求 Body，在读取过后会被置空，所以这里读取完后会重新赋值：比较消耗性能
 		// Restore the io.ReadCloser to its original state
 		c.Request.Body = ioutil.NopCloser(bytes.NewBuffer(bodyBytes))
 
-		// The basic informations.
+		// The basic information.
 		method := c.Request.Method
 		ip := c.ClientIP()
 
